@@ -35,32 +35,34 @@ def home():
 
 @app.route('/kot-predict', methods=['POST'])
 def kot_predict():
+    # Load the model
     model = load_kot_model()
-    data = request.json
+    
+    # Parse the JSON request
+    data = request.json  # This should extract JSON from the request body
+    
+    # Ensure forecast_steps is included and valid
+    if not data or 'forecast_steps' not in data:
+        return jsonify({'error': 'Invalid data format, please provide forecast_steps'}), 400
 
-    # Check if the required fields are present
-    if not data or 'Created' not in data or 'price' not in data:
-        return jsonify({'error': 'Invalid data format, please provide Created and price'}), 400
-
-    # Prepare the DataFrame from received data
-    new_data = pd.DataFrame(data)
-    new_data['Created'] = pd.to_datetime(new_data['Created'])  # Convert 'Created' to datetime
-    new_data.set_index('Created', inplace=True)  # Set 'Created' as the index
-
-    # Predicting KOT using the loaded model
-    forecast_steps = len(new_data)  # Number of steps to predict based on the new data
-    sarima = model.fit()  # Fit the SARIMA model
-    forecast = sarima.get_forecast(steps=forecast_steps)  # Forecast
-
+    forecast_steps = data['forecast_steps']  # Extract the number of steps to forecast
+    
+    # Fit the SARIMA model
+    sarima = model.fit()
+    
+    # Forecast the KOT for the given number of steps
+    forecast = sarima.get_forecast(steps=forecast_steps)
+    
     # Extract the predicted values
-    predicted_kot = forecast.predicted_mean.values.flatten().tolist()  # Get the forecasted values
-
+    predicted_kot = forecast.predicted_mean.values.flatten().tolist()  # Convert to a list
+    
     # Prepare the response
     response = {
-        'predicted_kot': predicted_kot  # Convert to list for JSON serialization
+        'predicted_kot': predicted_kot  # JSON serializable format
     }
 
     return jsonify(response), 200
+
 
     
 label_encoders = {
@@ -74,28 +76,25 @@ label_encoders = {
 @app.route('/sales-predict', methods=['POST'])
 def sales_predict():
     model = load_sales_model()
-    data = request.json
+    data = request.json  # This should extract JSON from the request body
+    
+    # Ensure forecast_steps is included and valid
+    if not data or 'forecast_steps' not in data:
+        return jsonify({'error': 'Invalid data format, please provide forecast_steps'}), 400
 
-    # Create a DataFrame from the received data
-    if not data or 'Sub_Total' not in data or 'Timestamp' not in data:
-        return jsonify({'error': 'Invalid data format, please provide Sub_Total and Timestamp'}), 400
-
-    # Prepare the DataFrame
-    new_data = pd.DataFrame(data)
-    new_data['Timestamp'] = pd.to_datetime(new_data['Timestamp'])
-    new_data.set_index('Timestamp', inplace=True)
-
-    # Forecasting
-    forecast_steps = len(new_data)  # Number of steps to forecast based on the new data
-
-    # Get forecast
-    sarimax = model.fit()
-    forecast_result = sarimax.get_forecast(steps=forecast_steps)
-    forecast = forecast_result.predicted_mean
+    forecast_steps = data['forecast_steps']  # Extract the number of steps to forecast
+    
+    # Fit the SARIMA model
+    sarima = model.fit()
+    
+    # Forecast the KOT for the given number of steps
+    forecast = sarima.get_forecast(steps=forecast_steps)
+    
+    forecast_values = forecast.predicted_mean.values.flatten().tolist() 
 
     # Prepare the response
     response = {
-        'forecast': forecast.tolist()  # Convert to list for JSON serialization
+        'forecast': forecast_values  # Convert to list for JSON serialization
     }
 
     return jsonify(response), 200
@@ -104,24 +103,23 @@ def sales_predict():
 @app.route('/inventory-predict', methods=['POST'])
 def inventory_predict():
     model = load_inventory_model()
-    data = request.json
+    
+    data = request.json  # This should extract JSON from the request body
+    
+    # Ensure forecast_steps is included and valid
+    if not data or 'forecast_steps' not in data:
+        return jsonify({'error': 'Invalid data format, please provide forecast_steps'}), 400
 
-    # Check if the required fields are present
-    if not data or 'Date' not in data or 'Quantity' not in data:
-        return jsonify({'error': 'Invalid data format, please provide date and quantity'}), 400
-
-    # Prepare the DataFrame from received data
-    new_data = pd.DataFrame(data)
-    new_data['Date'] = pd.to_datetime(new_data['Date'])  # Convert to datetime
-    new_data.set_index('Date', inplace=True)
-
-    # Forecasting using the loaded model
-    forecast_steps = len(new_data)  # Number of steps to forecast based on the new data
-    sarimax = model.fit()
-    forecast = sarimax.get_forecast(steps=forecast_steps)
-
-    # Extract the forecasted values
-    forecast_values = forecast.predicted_mean.values.flatten().tolist()  # Use .predicted_mean to get the values
+    forecast_steps = data['forecast_steps']  # Extract the number of steps to forecast
+    
+    # Fit the SARIMA model
+    sarima = model.fit()
+    
+    # Forecast the KOT for the given number of steps
+    forecast = sarima.get_forecast(steps=forecast_steps)
+    
+    # Extract the predicted values
+    forecast_values = forecast.predicted_mean.values.flatten().tolist()  # Convert to a list
 
     # Prepare the response
     response = {
