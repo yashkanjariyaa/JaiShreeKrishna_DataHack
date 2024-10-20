@@ -5,6 +5,7 @@ import L from 'leaflet';
 import ReligionType from './ReligionType';
 import 'leaflet/dist/leaflet.css';
 import Papa from 'papaparse';
+import { useNavigate } from 'react-router-dom';
 
 // Import the marker icon
 import markerIcon from 'leaflet/dist/images/marker-icon.png';
@@ -14,11 +15,12 @@ const FileUpload = () => {
     const [response, setResponse] = useState(null);
     const [error, setError] = useState(null);
     const [isDarkMode, setIsDarkMode] = useState(false);
-    const [position, setPosition] = useState([19.0760, 72.8777]); // Default position (Mumbai)
+    const [position, setPosition] = useState([ 19.120128, 72.9088]); // Default position (Mumbai)
     const [currentLocation, setCurrentLocation] = useState(null);
     const [selectedLocation, setSelectedLocation] = useState(null); // State to store the selected location
     const [religionInfo, setReligionInfo] = useState(null); // State to store religion info
     const [pincodeData, setPincodeData] = useState([]); // State to store all pincode data
+    const navigate = useNavigate();
 
 
     // Replace with your Gemini API key
@@ -196,6 +198,11 @@ const FileUpload = () => {
         );
     };
 
+    const handleNext = (e) =>{
+        e.preventDefault()
+        navigate('/info');
+    }
+
     return (
         <div className={`min-h-screen ${isDarkMode ? 'bg-gray-900 text-teal-300' : 'bg-gray-100 text-gray-900'}`}>
             <header className="flex justify-between items-center p-5 shadow-md bg-white dark:bg-gray-800">
@@ -288,11 +295,11 @@ const FileUpload = () => {
 
                 </div>
             </main>
-            
+
             <div className="flex justify-center">
                 <button
-                    type="submit"
                     className="bg-blue-600 hover:bg-blue-700 text-white py-3 px-4 rounded-md w-[200px] transition"
+                    onClick={e => handleNext(e)}
                 >
                     Next
                 </button>
