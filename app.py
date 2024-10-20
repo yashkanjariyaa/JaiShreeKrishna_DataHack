@@ -47,7 +47,7 @@ def kot_predict():
     if not data or 'forecast_steps' not in data:
         return jsonify({'error': 'Invalid data format, please provide forecast_steps'}), 400
 
-    forecast_steps = data['forecast_steps']  # Extract the number of steps to forecast
+    forecast_steps = int(data['forecast_steps'])  # Extract the number of steps to forecast
     
     # Fit the SARIMA model
     sarima = model.fit()
@@ -84,7 +84,7 @@ def sales_predict():
     if not data or 'forecast_steps' not in data:
         return jsonify({'error': 'Invalid data format, please provide forecast_steps'}), 400
 
-    forecast_steps = data['forecast_steps']  # Extract the number of steps to forecast
+    forecast_steps = int(data['forecast_steps'])  # Extract the number of steps to forecast
     
     # Fit the SARIMA model
     sarima = model.fit()
@@ -112,7 +112,7 @@ def inventory_predict():
     if not data or 'forecast_steps' not in data:
         return jsonify({'error': 'Invalid data format, please provide forecast_steps'}), 400
 
-    forecast_steps = data['forecast_steps']  # Extract the number of steps to forecast
+    forecast_steps = int(data['forecast_steps']) # Extract the number of steps to forecast
     
     # Fit the SARIMA model
     sarima = model.fit()
