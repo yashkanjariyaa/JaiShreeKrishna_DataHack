@@ -9,7 +9,7 @@ function App() {
   return (
     <Router>
       <div style={{ fontFamily: "Arial, sans-serif", padding: "20px" }}>
-        {/* <nav style={{ marginBottom: '20px', backgroundColor: '#f4f4f4', padding: '10px', borderRadius: '5px' }}>
+        <nav style={{ marginBottom: '20px', backgroundColor: '#f4f4f4', padding: '10px', borderRadius: '5px' }}>
           <ul style={{ listStyleType: 'none', padding: 0, display: 'flex', gap: '15px' }}>
             <li>
               <Link to="/" style={{ textDecoration: 'none', color: '#333' }}>Home</Link>
@@ -18,13 +18,16 @@ function App() {
               <Link to="/file-upload" style={{ textDecoration: 'none', color: '#333' }}>File Upload</Link>
             </li>
             <li>
-              <Link to="/calendar" style={{ textDecoration: 'none', color: '#333' }}>Calendar</Link>
+              <Link to="/info1" style={{ textDecoration: 'none', color: '#333' }}>Forecasting</Link>
             </li>
             <li>
-              <Link to="/model" style={{ textDecoration: 'none', color: '#333' }}>Model</Link>
+              <Link to="/info2" style={{ textDecoration: 'none', color: '#333' }}>Anomaly</Link>
+            </li>
+            <li>
+              <Link to="/tableau" style={{ textDecoration: 'none', color: '#333' }}>Dashboard</Link>
             </li>
           </ul>
-        </nav> */}
+        </nav>
 
         <Routes>
           <Route path="/" element={<h2>Welcome to the App</h2>} />
