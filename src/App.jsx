@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import FileUpload from './components/FileUpload'; 
 import DisplayInfo from './components/DisplayInfo';
 import Dashboard2 from './components/Dashboard2';
+import Nav from './components/Nav';
 
 function App() {
   return (
@@ -30,6 +31,7 @@ function App() {
           <Route path="/file-upload" element={<FileUpload />} />
           <Route path="/info1" element={<DisplayInfo />} />
           <Route path="/info2" element={<Dashboard2 />} />
+          <Route path="/info3" element={<Nav />} />
 
         </Routes>
       </div>

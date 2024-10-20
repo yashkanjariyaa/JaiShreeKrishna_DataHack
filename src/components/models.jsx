@@ -21,27 +21,27 @@ const Model = () => {
     };
 
     const postDataToAllEndpoints = async () => {
-        console.log('post')
+        console.log('post');
         setLoading(true);
         const responseArray = [];
 
         try {
             for (const endpoint of endpoints) {
                 const config = {
-                    method: "POST",
+                    method: 'POST',
                     url: endpoint,
                     headers: {
-                        'Content-type': 'application/json'
+                        'Content-type': 'application/json',
                     },
                     data: {
-                        "forecast_steps": inputData
-                    }
+                        forecast_steps: inputData,
+                    },
                 };
 
                 const response = await axios(config);
                 responseArray.push({ endpoint, data: response.data });
             }
-            console.log(responseArray)
+            console.log(responseArray);
             setResponses(responseArray);
         } catch (error) {
             console.error('Error posting to endpoints:', error);
@@ -51,35 +51,35 @@ const Model = () => {
         }
     };
 
-    const createChartData = () => {
-        const labels = Array.from({ length: 10 }, (_, i) => `Day ${i + 1}`);
-        const datasets = responses.map((res, index) => ({
-            label: res.endpoint.split('/').pop(),
-            data: res.data.forecast || res.data.predicted_kot || [],
-            borderColor: index === 0 ? 'rgba(255, 99, 132, 1)' : index === 1 ? 'rgba(54, 162, 235, 1)' : 'rgba(75, 192, 192, 1)',
-            backgroundColor: index === 0 ? 'rgba(255, 99, 132, 0.2)' : index === 1 ? 'rgba(54, 162, 235, 0.2)' : 'rgba(75, 192, 192, 0.2)',
-            fill: true,
-        }));
-
+    const createChartData = (data, label) => {
+        const labels = Array.from({ length: data.length }, (_, i) => `Day ${i + 1}`);
         return {
             labels,
-            datasets,
+            datasets: [
+                {
+                    label,
+                    data,
+                    borderColor: 'rgba(54, 162, 235, 1)',
+                    backgroundColor: 'rgba(54, 162, 235, 0.2)',
+                    fill: true,
+                },
+            ],
         };
     };
 
     const chartOptions = {
         responsive: true,
-        maintainAspectRatio: false, // Disable default aspect ratio
+        maintainAspectRatio: false,
     };
 
     return (
-        <div style={{ padding: '20px', height: '100%' }}> {/* Set a fixed height for the outer div */}
+        <div style={{ padding: '20px', height: '100%' }}>
             <h2>Post Data to API Endpoints and Display Responses</h2>
             <input
                 type="text"
                 value={inputData}
                 onChange={handleInputChange}
-                placeholder="Enter some data"
+                placeholder="Enter forecast steps"
                 style={{ padding: '8px', marginBottom: '10px', width: '300px' }}
             />
             <button onClick={postDataToAllEndpoints} style={{ padding: '8px 12px', marginLeft: '10px' }}>
@@ -90,10 +90,24 @@ const Model = () => {
                 <p>Loading...</p>
             ) : (
                 responses.length > 0 && (
-                    <div style={{ marginTop: '30px', height: '100%' }}> {/* Allow the chart div to take full height */}
+                    <div style={{ marginTop: '30px' }}>
                         <h3>Forecast Graphs:</h3>
-                        <div style={{ position: 'relative', height: '100%', width: "100%" }}> {/* Ensure relative positioning for the chart */}
-                            <Line data={createChartData()} options={chartOptions} style={{ height: '100%', width: '100%' }} />
+                        <div style={{ display: 'flex', justifyContent: 'space-around', flexWrap: 'wrap' }}>
+                            {responses.map((res, index) => (
+                                <div
+                                    key={index}
+                                    style={{ width: '30%', height: '300px', marginBottom: '20px' }}
+                                >
+                                    <h4>{res.endpoint.split('/').pop()}</h4>
+                                    <Line
+                                        data={createChartData(
+                                            res.data.forecast || res.data.predicted_kot || [],
+                                            res.endpoint.split('/').pop()
+                                        )}
+                                        options={chartOptions}
+                                    />
+                                </div>
+                            ))}
                         </div>
                     </div>
                 )
