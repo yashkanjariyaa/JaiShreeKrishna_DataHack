@@ -1,2 +1,7 @@
 Flask
 gunicorn
+numpy
+pandas
+joblib
+sklearn
+flask_cors
