@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import FileUpload from './components/FileUpload'; 
 import DisplayInfo from './components/DisplayInfo';
+import Dashboard2 from './components/Dashboard2';
 
 function App() {
   return (
@@ -27,7 +28,9 @@ function App() {
         <Routes>
           <Route path="/" element={<h2>Welcome to the App</h2>} />
           <Route path="/file-upload" element={<FileUpload />} />
-          <Route path="/info" element={<DisplayInfo />} />
+          <Route path="/info1" element={<DisplayInfo />} />
+          <Route path="/info2" element={<Dashboard2 />} />
+
         </Routes>
       </div>
     </Router>
