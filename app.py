@@ -4,9 +4,13 @@ import numpy as np
 from joblib import dump, load
 from sklearn.preprocessing import LabelEncoder
 from flask_cors import CORS
+import os
+import google.generativeai as genai
 
 app = Flask(__name__)
 CORS(app)
+
+genai.configure(api_key="AIzaSyCLVFGlzlD38y9oiMSlKCm1hUuA-Ln_RT8")
 
 def load_sales_model():
     with open('model/sales_model.joblib', 'rb') as f:
@@ -129,6 +133,32 @@ def inventory_predict():
     }
 
     return jsonify(response), 200
+
+@app.route('/analyze-image', methods=['POST'])
+def analyze_image():
+    data = request.json  # Expecting JSON payload
+    image_path = data.get('image_path')
+
+    if not image_path or not os.path.exists(image_path):
+        return jsonify({"error": "Invalid image path provided"}), 400
+
+    try:
+        # Upload the image file to Google Gemini API
+        uploaded_file = genai.upload_file(path=image_path, display_name="uploaded_image")
+
+        # Choose a Gemini model
+        model = genai.GenerativeModel("gemini-1.5-flash")
+
+        # Generate content
+        prompt = "Can you tell me about the instruments in this photo?"
+        result = model.generate_content([uploaded_file, "\n\n", prompt])
+
+        # Return the result
+        return jsonify({"analysis": result.text}), 200
+
+    except Exception as e:
+        return jsonify({"error": str(e)}), 500
+
 
 if __name__ == '__main__':
     app.run(debug=True)

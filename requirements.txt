@@ -6,3 +6,6 @@ joblib
 scikit-learn
 flask_cors
 statsmodels
+os
+genai
+pillow
