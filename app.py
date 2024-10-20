@@ -3,8 +3,10 @@ import pandas as pd
 import numpy as np
 from joblib import dump, load
 from sklearn.preprocessing import LabelEncoder
+from flask_cors import CORS
 
 app = Flask(__name__)
+CORS(app)
 
 def load_sales_model():
     with open('model/sales_model.joblib', 'rb') as f:
