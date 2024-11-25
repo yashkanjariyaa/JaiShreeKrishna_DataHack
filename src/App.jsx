@@ -4,6 +4,7 @@ import FileUpload from "./components/FileUpload";
 import DisplayInfo from "./components/DisplayInfo";
 import Dashboard2 from "./components/Dashboard2";
 import TableauDashboard from "./components/TableauDashboard";
+import Home from "./components/Home";
 
 function App() {
   return (
@@ -30,7 +31,7 @@ function App() {
         </nav>
 
         <Routes>
-          <Route path="/" element={<h2>Welcome to the App</h2>} />
+          <Route path="/" element={<Home/>} />
           <Route path="/file-upload" element={<FileUpload />} />
           <Route path="/info1" element={<DisplayInfo />} />
           <Route path="/info2" element={<Dashboard2 />} />
